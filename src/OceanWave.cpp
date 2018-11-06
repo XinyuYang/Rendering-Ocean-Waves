@@ -1,4 +1,4 @@
-#include "ExampleApp.h"
+#include "OceanWave.h"
 
 #define FONTSTASH_IMPLEMENTATION
 #include <fontstash.h>
@@ -13,19 +13,19 @@ using namespace basicgraphics;
 using namespace std;
 using namespace glm;
 
-ExampleApp::ExampleApp(int argc, char** argv) : VRApp(argc, argv)
+OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
     _curFrameTime = 0.0;
 }
 
-ExampleApp::~ExampleApp()
+OceanWave::~OceanWave()
 {
 	glfonsDelete(fs);
 	shutdown();
 }
 
-void ExampleApp::onAnalogChange(const VRAnalogEvent &event) {
+void OceanWave::onAnalogChange(const VRAnalogEvent &event) {
     // This routine is called for all Analog_Change events.  Check event->getName()
     // to see exactly which analog input has been changed, and then access the
     // new value with event->getValue().
@@ -38,28 +38,28 @@ void ExampleApp::onAnalogChange(const VRAnalogEvent &event) {
 
 }
 
-void ExampleApp::onButtonDown(const VRButtonEvent &event) {
+void OceanWave::onButtonDown(const VRButtonEvent &event) {
     // This routine is called for all Button_Down events.  Check event->getName()
     // to see exactly which button has been pressed down.
 	
 	//std::cout << "ButtonDown: " << event.getName() << std::endl;
 }
 
-void ExampleApp::onButtonUp(const VRButtonEvent &event) {
+void OceanWave::onButtonUp(const VRButtonEvent &event) {
     // This routine is called for all Button_Up events.  Check event->getName()
     // to see exactly which button has been released.
 
 	//std::cout << "ButtonUp: " << event.getName() << std::endl;
 }
 
-void ExampleApp::onCursorMove(const VRCursorEvent &event) {
+void OceanWave::onCursorMove(const VRCursorEvent &event) {
 	// This routine is called for all mouse move events. You can get the absolute position
 	// or the relative position within the window scaled 0--1.
 	
 	//std::cout << "MouseMove: "<< event.getName() << " " << event.getPos()[0] << " " << event.getPos()[1] << std::endl;
 }
 
-void ExampleApp::onTrackerMove(const VRTrackerEvent &event) {
+void OceanWave::onTrackerMove(const VRTrackerEvent &event) {
     // This routine is called for all Tracker_Move events.  Check event->getName()
     // to see exactly which tracker has moved, and then access the tracker's new
     // 4x4 transformation matrix with event->getTransform().
@@ -67,7 +67,7 @@ void ExampleApp::onTrackerMove(const VRTrackerEvent &event) {
 	// We will use trackers when we do a virtual reality assignment. For now, you can ignore this input type.
 }
 
-void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
+void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
     // This routine is called once per graphics context at the start of the
     // rendering process.  So, this is the place to initialize textures,
     // load models, or do other operations that you only want to do once per
@@ -104,201 +104,11 @@ void ExampleApp::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		reloadShaders();
 
 		initializeText();
-
-        // Or using GEO_TRIANGLES
-        
-//        vec3 pos1(0, 0, 0);
-//
-//        vec3 normal(0, 0, 1);
-//        vec2 texCoord1(0, 0);
-//
-//        Mesh::Vertex line;
-//        line.position = pos1;
-//        line.normal = normal;
-//        line.texCoord0 = texCoord1;
-//        cpuVertexArray.push_back(line);
-//        cpuIndexArray.push_back(0);
-        
-        
-        // drawing top and bottom
-        // drawing top circle area
-        Mesh::Vertex topLine;
-        int topCount = 0;
-        vec3 topNormal = vec3(0, 1, 0);
-        
-        vec3 point1(0, 1, 0);
-        topLine.position = point1;
-        topLine.normal = topNormal;
-        topVertexArray.push_back(topLine);
-        topIndexArray.push_back(topCount);
-        topCount++;
-        
-        vec3 point2(1, 1, 0);
-        topLine.position = point2;
-        topVertexArray.push_back(topLine);
-        topIndexArray.push_back(topCount);
-        topCount++;
-        
-        vec3 point3(cos(radians(float(1/360))), 1, sin(radians(float(1/360))));
-        topLine.position = point3;
-        topVertexArray.push_back(topLine);
-        topIndexArray.push_back(topCount);
-        topCount++;
-        
-        for (int i = 1; i < 360; i++){
-            vec3 point2 = point3;
-            topLine.position = point2;
-            topVertexArray.push_back(topLine);
-            topIndexArray.push_back(topCount);
-            topCount++;
-            
-            vec3 point3(cos(radians(float(i/360))), 1, sin(radians(float(i/360))));
-            topLine.position = point3;
-            topVertexArray.push_back(topLine);
-            topIndexArray.push_back(topCount);
-            topCount++;
-        }
-        
-        
-        const int topNumVertices = topVertexArray.size();
-        const int topVertexByteSize = sizeof(Mesh::Vertex) * topNumVertices;
-        const int topIndexByteSize = sizeof(int) * topIndexArray.size();
-        
-        _meshTop.reset(new Mesh(textures, GL_TRIANGLES, GL_STATIC_DRAW,
-                             topVertexByteSize, topIndexByteSize, 0, topVertexArray,
-                             topIndexArray.size(), topIndexByteSize, &topIndexArray[0]));
-        
-        _meshTop->setMaterialColor(vec4(0, 0, 0, 0));
-        
-        // drawing bottom circle area
-        Mesh::Vertex bottomLine;
-        int bottomCount = 0;
-        vec3 bottomNormal = vec3(0, -1, 0);
-        
-        vec3 bottompoint1(0, -1, 0);
-        bottomLine.position = bottompoint1;
-        bottomLine.normal = bottomNormal;
-        bottomVertexArray.push_back(bottomLine);
-        bottomIndexArray.push_back(bottomCount);
-        bottomCount++;
-        
-        vec3 bottompoint2(1, -1, 0);
-        bottomLine.position = bottompoint2;
-        bottomVertexArray.push_back(bottomLine);
-        bottomIndexArray.push_back(bottomCount);
-        bottomCount++;
-        
-        vec3 bottompoint3(cos(radians(float(1/360))), -1, sin(radians(float(1/360))));
-        bottomLine.position = bottompoint3;
-        bottomVertexArray.push_back(bottomLine);
-        bottomIndexArray.push_back(bottomCount);
-        bottomCount++;
-        
-        for (int i = 1; i < 360; i++){
-            vec3 bottompoint2 = bottompoint3;
-            bottomLine.position = bottompoint2;
-            bottomVertexArray.push_back(bottomLine);
-            bottomIndexArray.push_back(bottomCount);
-            bottomCount++;
-            
-            vec3 bottompoint3(cos(radians(float(i/360))), -1, sin(radians(float(i/360))));
-            bottomLine.position = bottompoint3;
-            bottomVertexArray.push_back(bottomLine);
-            bottomIndexArray.push_back(bottomCount);
-            bottomCount++;
-        }
-        
-        
-        const int bottomNumVertices = bottomVertexArray.size();
-        const int bottomVertexByteSize = sizeof(Mesh::Vertex) * bottomNumVertices;
-        const int bottomIndexByteSize = sizeof(int) * bottomIndexArray.size();
-        
-        _meshBottom.reset(new Mesh(textures, GL_TRIANGLES, GL_STATIC_DRAW,
-                                bottomVertexByteSize, bottomIndexByteSize, 0, bottomVertexArray,
-                                bottomIndexArray.size(), bottomIndexByteSize, &bottomIndexArray[0]));
-        
-        _meshBottom->setMaterialColor(vec4(0, 0, 0, 0));
-        
-        // drawing the side
-        int count = 0;
-        vec3 pos1(1, -1, 0);
-        vec3 pos2(1, 1, 0);
-        vec3 normal(1, 0, 0);
-        vec2 texCoord1(0, 0);
-        vec2 texCoord2(1, 0);
-        Mesh::Vertex line;
-        
-        line.position = pos1;
-        line.normal = normal;
-        line.texCoord0 = texCoord1;
-        cpuVertexArray.push_back(line);
-        cpuIndexArray.push_back(count);
-        count++;
-        
-        line.position = pos2;
-        line.texCoord0 = texCoord2;
-        cpuVertexArray.push_back(line);
-        cpuIndexArray.push_back(count);
-        count++;
-        
-        for (int i = 0; i < 360; i++){
-            vec3 pos1(cos(radians(float(i))), -1, sin(radians(float(i))));
-            vec3 pos2(cos(radians(float(i))), 1, sin(radians(float(i))));
-            vec3 normal(cos(radians(float(i))), 0, sin(radians(float(i))));
-            
-            float angle = (270 - i) % 360 / 360.f;
-            cout << to_string(angle) << endl;
-            vec2 texCoord1(angle, 1);
-            vec2 texCoord2(angle, 0);
-            Mesh::Vertex line;
-            
-            line.position = pos1;
-            line.normal = normal;
-            line.texCoord0 = texCoord1;
-            cpuVertexArray.push_back(line);
-            cpuIndexArray.push_back(count);
-            count++;
-            
-            line.position = pos2;
-            line.normal = normal;
-            line.texCoord0 = texCoord2;
-            cpuVertexArray.push_back(line);
-            cpuIndexArray.push_back(count);
-            count++;
-            
-        }
-        
-        line.position = pos1;
-        line.normal = normal;
-        line.texCoord0 = texCoord1;
-        cpuVertexArray.push_back(line);
-        cpuIndexArray.push_back(count);
-        count++;
-        
-        line.position = pos2;
-        line.texCoord0 = texCoord2;
-        cpuVertexArray.push_back(line);
-        cpuIndexArray.push_back(count);
-        
-        //Initialize the _mesh variable with a triangle mesh uploaded to the GPU.
-        
-        const int numVertices = cpuVertexArray.size();
-        const int cpuVertexByteSize = sizeof(Mesh::Vertex) * numVertices;
-        const int cpuIndexByteSize = sizeof(int) * cpuIndexArray.size();
-        
-        std::shared_ptr<Texture> tex =
-        Texture::create2DTextureFromFile("campbells.jpg");
-        textures.push_back(tex);
-        
-        _mesh.reset(new Mesh(textures, GL_TRIANGLE_STRIP, GL_STATIC_DRAW,
-                             cpuVertexByteSize, cpuIndexByteSize, 0, cpuVertexArray,
-                             cpuIndexArray.size(), cpuIndexByteSize, &cpuIndexArray[0]));
-
         
     }
 }
 
-void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
+void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     // This routine is called once per eye/camera.  This is the place to actually
     // draw the scene.
     
@@ -327,15 +137,10 @@ void ExampleApp::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	_shader.setUniform("normal_mat", mat3(transpose(inverse(model))));
 	_shader.setUniform("eye_world", eye_world);
     
-    
-    // Draw the mesh
-    _mesh->draw(_shader);
-    _meshTop->draw(_shader);
-    _meshBottom->draw(_shader);
 
 }
 
-void ExampleApp::drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth) {
+void OceanWave::drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth) {
 	//float lh = 0;
 	//fonsVertMetrics(fs, NULL, NULL, &lh);
 	//double width = fonsTextBounds(fs, text.c_str(), NULL, NULL) + 40;
@@ -360,7 +165,7 @@ void ExampleApp::drawText(const std::string text, float xPos, float yPos, GLfloa
 
 }
 
-void ExampleApp::reloadShaders()
+void OceanWave::reloadShaders()
 {
 	_shader.compileShader("texture.vert", GLSLShader::VERTEX);
 	_shader.compileShader("texture.frag", GLSLShader::FRAGMENT);
@@ -368,7 +173,7 @@ void ExampleApp::reloadShaders()
 	_shader.use();
 }
 
-void ExampleApp::initializeText() {
+void OceanWave::initializeText() {
 	int fontNormal = FONS_INVALID;
 	fs = nullptr;
 

@@ -1,5 +1,5 @@
-#ifndef EXAMPLEAPP_H
-#define EXAMPLEAPP_H
+#ifndef OCEANWAVE_H
+#define OCEANWAVE_H
 
 #include <api/MinVR.h>
 using namespace MinVR;
@@ -32,13 +32,13 @@ using namespace MinVR;
 #include <BasicGraphics.h>
 using namespace basicgraphics;
 
-class ExampleApp : public VRApp {
+class OceanWave : public VRApp {
 public:
     
     /** The constructor passes argc, argv, and a MinVR config file on to VRApp.
      */
-	ExampleApp(int argc, char** argv);
-    virtual ~ExampleApp();
+	OceanWave(int argc, char** argv);
+    virtual ~OceanWave();
 
     
     /** USER INTERFACE CALLBACKS **/
