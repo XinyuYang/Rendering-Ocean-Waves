@@ -101,7 +101,12 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 		// This load shaders from disk, we do it once when the program starts up.
-		reloadShaders();
+		// build and compile shaders
+        reloadShaders();
+        
+        // load model
+        // -----------
+        basicgraphics::Model oceanModel("resources/Ocean.obj", 1.0, glm::vec4(1.0));
 
 		initializeText();
         
