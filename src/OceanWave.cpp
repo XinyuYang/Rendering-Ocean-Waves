@@ -106,9 +106,19 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         // load model
         // -----------
-        basicgraphics::Model oceanModel("resources/Ocean.obj", 1.0, glm::vec4(1.0));
+        basicgraphics::Model _modelMesh("resources/Ocean.obj", 1.0, glm::vec4(1.0));
+        
+        // load ocean surface texture
+        // -----------
+        _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.png");
+        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		initializeText();
+        // Todo: load envrionment texture Map
+        // string texturefiles[] = {"","","",""}
+        // envrionmentMap = Texture::createCubeMapFromFiles(texturefiles, true, 4)
+        //environmentMap->setTexParameteri(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        //skyBox.reset( new SkyBox(envroinmentMap));
         
     }
 }

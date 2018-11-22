@@ -7,6 +7,7 @@ using namespace MinVR;
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include "TurntableManipulator.h"
 
 #ifdef _WIN32
 #include "GL/glew.h"
@@ -58,31 +59,21 @@ private:
 	double _lastTime;
 	double _curFrameTime;
     
-    std::unique_ptr<basicgraphics::Mesh> _mesh;
-    std::unique_ptr<basicgraphics::Mesh> _meshTop;
-    std::unique_ptr<basicgraphics::Mesh> _meshBottom;
-    
     virtual void reloadShaders();
+    
+    // Add bumpMap
+    std::shared_ptr<Texture> _bumpMap;
+    
     basicgraphics::GLSLProgram _shader;
-
-	void initializeText();
-	void drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth);
-	struct FONScontext* fs;
-    basicgraphics::GLSLProgram _textShader;
     
-    /** Mesh and texture**/
-    std::vector<Mesh::Vertex> topVertexArray;
-    std::vector<int> topIndexArray;
-    std::vector<std::shared_ptr<Texture>> topTextures;
+    std::unique_ptr<Model> _modelMesh;
+    std::shared_ptr<TurntableManipulator> turntable;
     
-    std::vector<Mesh::Vertex> bottomVertexArray;
-    std::vector<int> bottomIndexArray;
-    std::vector<std::shared_ptr<Texture>> bottomTextures;
-    
-    std::vector<Mesh::Vertex> cpuVertexArray;
-    std::vector<int> cpuIndexArray;
-    std::vector<std::shared_ptr<Texture>> textures;
-    
+    glm::vec4 _lightPosition;
+    bool _drawLightVector;
+    float _diffuseOnOff;  // 1.0 when on, 0.0 when off
+    float _specularOnOff; // 1.0 when on, 0.0 when off
+    float _ambientOnOff;  // 1.0 when on, 0.0 when off
     
 };
 
