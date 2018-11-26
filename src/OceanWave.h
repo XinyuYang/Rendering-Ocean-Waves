@@ -7,7 +7,6 @@ using namespace MinVR;
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
-#include "TurntableManipulator.h"
 
 #ifdef _WIN32
 #include "GL/glew.h"
@@ -31,6 +30,7 @@ using namespace MinVR;
 #endif
 
 #include <BasicGraphics.h>
+#include "TurntableManipulator.h"
 using namespace basicgraphics;
 
 class OceanWave : public VRApp {
@@ -67,13 +67,10 @@ private:
     basicgraphics::GLSLProgram _shader;
     
     std::unique_ptr<Model> _modelMesh;
-    std::shared_ptr<TurntableManipulator> turntable;
+    std::shared_ptr<basicgraphics::TurntableManipulator> turntable;
     
     glm::vec4 _lightPosition;
     bool _drawLightVector;
-    float _diffuseOnOff;  // 1.0 when on, 0.0 when off
-    float _specularOnOff; // 1.0 when on, 0.0 when off
-    float _ambientOnOff;  // 1.0 when on, 0.0 when off
     
 };
 
