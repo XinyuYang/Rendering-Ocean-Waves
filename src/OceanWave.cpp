@@ -21,6 +21,8 @@ OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
     _curFrameTime = 0.0;
+    
+    eye_world = glm::vec3(0, 0, 4);
 }
 
 OceanWave::~OceanWave()
@@ -51,16 +53,16 @@ void OceanWave::onButtonDown(const VRButtonEvent &event) {
 void OceanWave::onButtonUp(const VRButtonEvent &event) {
     // This routine is called for all Button_Up events.  Check event->getName()
     // to see exactly which button has been released.
-     turntable->onButtonUp(event);
+//     turntable->onButtonUp(event);
 
-	//std::cout << "ButtonUp: " << event.getName() << std::endl;
+    std::cout << "ButtonUp: " << event.getName() << std::endl;
 }
 
 void OceanWave::onCursorMove(const VRCursorEvent &event) {
 	// This routine is called for all mouse move events. You can get the absolute position
 	// or the relative position within the window scaled 0--1.
-	turntable->onCursorMove(event);
-	//std::cout << "MouseMove: "<< event.getName() << " " << event.getPos()[0] << " " << event.getPos()[1] << std::endl;
+//    turntable->onCursorMove(event);
+    std::cout << "MouseMove: "<< event.getName() << " " << event.getPos()[0] << " " << event.getPos()[1] << std::endl;
 }
 
 void OceanWave::onTrackerMove(const VRTrackerEvent &event) {
@@ -110,13 +112,13 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         // load model
         // -----------
-        basicgraphics::Model _modelMesh("Ocean.obj", 1.0, glm::vec4(1.0));
+        _modelMesh.reset(new Model("resources/Ocean.obj", 1.0, glm::vec4(1.0)));
         
         // load ocean surface texture
         // -----------
-        _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.jpg");
-        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//        _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.jpg");
+//        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         // Todo: load envrionment texture Map
         // string texturefiles[] = {"","","",""}
@@ -160,19 +162,18 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 
     // Setup the view matrix to set where the camera is located in the scene
     glm::vec3 eye_world = glm::vec3(0, 0, 5);
-//    glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    
     // Setup the camera with a good initial position and view direction to see the table
-    glm::mat4 view = turntable->frame();
-    glm::mat4 model(1.0);
+    glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	// Setup the projection matrix so that things are rendered in perspective
 	GLfloat windowHeight = renderState.index().getValue("WindowHeight");
 	GLfloat windowWidth = renderState.index().getValue("WindowWidth");
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), windowWidth / windowHeight, 0.01f, 100.0f);
-	
-//    // Setup the model matrix
-//    glm::mat4 model = glm::mat4(1.0);
     
+    // Setup the model matrix
+    glm::mat4 model = glm::mat4(1.0);
+
 	// Tell opengl we want to use this specific shader.
 	_shader.use();
 	
@@ -251,54 +252,4 @@ void OceanWave::reloadShaders()
 	_shader.use();
 }
 
-//void OceanWave::initializeText() {
-//    int fontNormal = FONS_INVALID;
-//    fs = nullptr;
-//
-//    fs = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-//    if (fs == NULL) {
-//        assert(false);//Could not create stash
-//    }
-//
-//    fontNormal = fonsAddFont(fs, "sans", "DroidSansMono.ttf");
-//    if (fontNormal == FONS_INVALID) {
-//        assert(false);// Could not add font normal.
-//    }
-//
-//    unsigned int black = glfonsRGBA(0, 0, 0, 255);
-//
-//    fonsClearState(fs);
-//    fonsSetSize(fs, 20);
-//    fonsSetFont(fs, fontNormal);
-//    fonsSetColor(fs, black);
-//    fonsSetAlign(fs, FONS_ALIGN_LEFT | FONS_ALIGN_TOP);
-//
-//    _textShader.compileShader("textRendering.vert", GLSLShader::VERTEX);
-//    _textShader.compileShader("textRendering.frag", GLSLShader::FRAGMENT);
-//    _textShader.link();
-//}
-
-//void OceanWave::drawText(const std::string text, float xPos, float yPos, GLfloat windowHeight, GLfloat windowWidth) {
-//    //float lh = 0;
-//    //fonsVertMetrics(fs, NULL, NULL, &lh);
-//    //double width = fonsTextBounds(fs, text.c_str(), NULL, NULL) + 40;
-//    //double height = lh + 40;
-//
-//    _textShader.use();
-//    _textShader.setUniform("projection_mat", glm::ortho(0.f, windowWidth, windowHeight, 0.f, -1.f, 1.f));
-//    _textShader.setUniform("view_mat", glm::mat4(1.0));
-//    _textShader.setUniform("model_mat", glm::mat4(1.0));
-//    _textShader.setUniform("lambertian_texture", 0);
-//
-//    glDisable(GL_DEPTH_TEST);
-//    glEnable(GL_CULL_FACE);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//
-//
-//    glDisable(GL_BLEND);
-//    glEnable(GL_DEPTH_TEST);
-//    _shader.use();
-//
-//}
 

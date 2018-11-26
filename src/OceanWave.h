@@ -59,7 +59,11 @@ private:
 	double _lastTime;
 	double _curFrameTime;
     
+    glm::vec3 eye_world;
+    
     virtual void reloadShaders();
+    
+    glm::mat4 model;
     
     // Add bumpMap
     std::shared_ptr<Texture> _bumpMap;
@@ -70,7 +74,6 @@ private:
     std::shared_ptr<basicgraphics::TurntableManipulator> turntable;
     
     glm::vec4 _lightPosition;
-    bool _drawLightVector;
     
 };
 
