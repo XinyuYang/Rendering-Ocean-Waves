@@ -243,7 +243,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 
 }
 
-
 void OceanWave::reloadShaders()
 {
 	_shader.compileShader("OceanWave.vert", GLSLShader::VERTEX);
