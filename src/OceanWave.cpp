@@ -203,12 +203,11 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     float eta = 0.67;
     vec3 glassEta(0.65, 0.67, 0.68);
     
-    
 //    // Set texture uniform
 //    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
 //    _bumpMap->bind(1);
 //    _shader.setUniform("_bumpMap", 1);
-//
+
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
     
     // TODO: Set shader material properties (k coeffs)
@@ -234,11 +233,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
     // TODO: Set shader light properties (intensity and position)
     _shader.setUniform("lightPosition", _lightPosition);
-    
-    
-    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
-//    environmentMap->bind(1);
-//    _shader.setUniform("environmentMap", 1);
     
 
     // Draw the model
