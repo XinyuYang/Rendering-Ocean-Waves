@@ -22,7 +22,7 @@ OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 	_lastTime = 0.0;
     _curFrameTime = 0.0;
     
-    eye_world = glm::vec3(0, 100, 200);
+    eye_world = glm::vec3(0, 500, 500);
 }
 
 OceanWave::~OceanWave()
@@ -112,7 +112,7 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         // load model
         // -----------
-        _modelMesh.reset(new Model("Ocean2.obj", 1.0, glm::vec4(1.0)));
+        _modelMesh.reset(new Model("Ocean3.obj", 1.0, glm::vec4(1.0)));
         
         // load ocean surface texture
         // -----------
