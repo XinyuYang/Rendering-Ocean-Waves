@@ -116,7 +116,7 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         // load ocean surface texture
         // -----------
-//        _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.jpg");
+//        _bumpMap = Texture::create2DTextureFromFile("resources/txt_002_bump.jpg");
 //        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 //        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
