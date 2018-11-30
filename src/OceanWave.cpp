@@ -22,7 +22,7 @@ OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 	_lastTime = 0.0;
     _curFrameTime = 0.0;
     
-    eye_world = glm::vec3(0, 500, 500);
+    eye_world = glm::vec3(0, 1000, 1000);
 }
 
 OceanWave::~OceanWave()
@@ -112,13 +112,13 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         // load model
         // -----------
-        _modelMesh.reset(new Model("Ocean3.obj", 1.0, glm::vec4(1.0)));
+        _modelMesh.reset(new Model("Ocean3.obj", 0.05, glm::vec4(1.0)));
         
         // load ocean surface texture
         // -----------
-//        _bumpMap = Texture::create2DTextureFromFile("resources/txt_002_bump.jpg");
-//        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.jpg");
+        _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         
     }
@@ -132,7 +132,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Setup the view matrix to set where the camera is located in the scene
-    glm::vec3 eye_world = glm::vec3(0, 0, 5);
+    glm::vec3 eye_world = glm::vec3(0, 10, 5);
     
     // Setup the camera with a good initial position and view direction to see the table
     glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
@@ -176,8 +176,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
 //    // Set texture uniform
 //    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
-//    _bumpMap->bind(1);
-//    _shader.setUniform("_bumpMap", 1);
+    _bumpMap->bind(1);
+    _shader.setUniform("_bumpMap", 1);
 
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
     

@@ -11,7 +11,7 @@ in vec3 interpSurfNormal;
 uniform vec4 lightPosition;
 
 //Textures
-//uniform sampler2D _bumpMap;
+uniform sampler2D _bumpMap;
 
 // Material Properties
 uniform float eta; // The eta value to use initially. This reflects all light wavelengths in the same direction
