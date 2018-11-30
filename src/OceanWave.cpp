@@ -119,8 +119,14 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         _bumpMap = Texture::create2DTextureFromFile("txt_002_bump.jpg");
         _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
         
+        
+        _reflectionTextureMap = Texture::create2DTextureFromFile("dusk.jpg");
+        _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
+        float radius = 5.0;
+        _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
     }
 }
 
@@ -136,6 +142,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
     // Setup the camera with a good initial position and view direction to see the table
     glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
+//       glm::mat4 view = turntable->frame();
 
 	// Setup the projection matrix so that things are rendered in perspective
 	GLfloat windowHeight = renderState.index().getValue("WindowHeight");
@@ -171,13 +178,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     vec3 specularLightIntensity(1.0, 1.0, 1.0);
     
     float glassR0 = 0.0200;
-    float eta = 0.67;
     vec3 glassEta(0.65, 0.67, 0.68);
-    
-//    // Set texture uniform
-//    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
-    _bumpMap->bind(1);
-    _shader.setUniform("_bumpMap", 1);
 
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
     
@@ -191,7 +192,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
     _shader.setUniform("specularLightIntensity", specularLightIntensity);
-    _shader.setUniform("eta", eta);
     
     // Cook-Torrance specific properties, m is roughness of water surface
     //Todo: calculate the water r0=0.0200
@@ -199,13 +199,23 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("m", m);
     
     _shader.setUniform("glassR0", glassR0);
-    _shader.setUniform("eta", eta);
     _shader.setUniform("glassEta", glassEta);
     
     // TODO: Set shader light properties (intensity and position)
     _shader.setUniform("lightPosition", _lightPosition);
     
-
+    
+    // Set texture uniform
+    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
+    _bumpMap->bind(1);
+    _shader.setUniform("_bumpMap", 1);
+    
+    _reflectionTextureMap->bind(2);
+    _shader.setUniform("_reflectionTextureMap", 2);
+    
+//    vec3 eyePosition = turntable->getPos();
+//    _shader.setUniform("eye_world", eyePosition);
+    
     // Draw the model
     _modelMesh->draw(_shader);
     
