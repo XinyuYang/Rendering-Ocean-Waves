@@ -36,10 +36,14 @@ message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
 set(source_files
   src/main.cpp
   src/OceanWave.cpp
+  src/TurntableManipulator.cpp
+  src/Skybox.cpp
 )
 
 set(header_files
   src/OceanWave.h
+  src/TurntableManipulator.h
+  src/Skybox.h
 )
 
 set(extra_files

@@ -13,9 +13,9 @@ using namespace basicgraphics;
 using namespace std;
 using namespace glm;
 
-// settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+//// settings
+//const unsigned int SCR_WIDTH = 1280;
+//const unsigned int SCR_HEIGHT = 720;
 
 OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 {
@@ -48,12 +48,13 @@ void OceanWave::onButtonDown(const VRButtonEvent &event) {
     // to see exactly which button has been pressed down.
 	
 	//std::cout << "ButtonDown: " << event.getName() << std::endl;
+    turntable->onButtonDown(event);
 }
 
 void OceanWave::onButtonUp(const VRButtonEvent &event) {
     // This routine is called for all Button_Up events.  Check event->getName()
     // to see exactly which button has been released.
-//     turntable->onButtonUp(event);
+     turntable->onButtonUp(event);
 
     std::cout << "ButtonUp: " << event.getName() << std::endl;
 }
@@ -61,8 +62,8 @@ void OceanWave::onButtonUp(const VRButtonEvent &event) {
 void OceanWave::onCursorMove(const VRCursorEvent &event) {
 	// This routine is called for all mouse move events. You can get the absolute position
 	// or the relative position within the window scaled 0--1.
-//    turntable->onCursorMove(event);
-    std::cout << "MouseMove: "<< event.getName() << " " << event.getPos()[0] << " " << event.getPos()[1] << std::endl;
+    turntable->onCursorMove(event);
+//    std::cout << "MouseMove: "<< event.getName() << " " << event.getPos()[0] << " " << event.getPos()[1] << std::endl;
 }
 
 void OceanWave::onTrackerMove(const VRTrackerEvent &event) {
@@ -127,6 +128,11 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
+        
+//        skyBox.reset(new Skybox(environmentMap));
+        
+        turntable.reset(new TurntableManipulator());
+        turntable->setCenterPosition(vec3(0,0,0));
     }
 }
 
@@ -141,8 +147,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glm::vec3 eye_world = glm::vec3(0, 10, 5);
     
     // Setup the camera with a good initial position and view direction to see the table
-    glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
-//       glm::mat4 view = turntable->frame();
+//    glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));
+    glm::mat4 view = turntable->frame();
 
 	// Setup the projection matrix so that things are rendered in perspective
 	GLfloat windowHeight = renderState.index().getValue("WindowHeight");
@@ -213,8 +219,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _reflectionTextureMap->bind(2);
     _shader.setUniform("_reflectionTextureMap", 2);
     
-//    vec3 eyePosition = turntable->getPos();
-//    _shader.setUniform("eye_world", eyePosition);
+    vec3 eyePosition = turntable->getPos();
+    _shader.setUniform("eye_world", eyePosition);
     
     // Draw the model
     _modelMesh->draw(_shader);
