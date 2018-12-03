@@ -129,7 +129,24 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
         
-//        skyBox.reset(new Skybox(environmentMap));
+        // Initialize the texture environment map
+        // Order should be:
+        // +X (right)
+        // -X (left)
+        // +Y (top)
+        // -Y (bottom)
+        // +Z (front)
+        // -Z (back)
+        string textureFiles[] = {"right.jpg", "left.jpg", "up.jpg", "down.jpg", "forward.jpg", "back.jpg"};
+//        string textureFiles[] = {"desert_evening_east.jpg", "desert_evening_west.jpg", "desert_evening_up.jpg", "desert_evening_down.jpg", "desert_evening_north.jpg", "desert_evening_south.jpg"};
+        environmentMap = Texture::createCubeMapFromFiles(textureFiles, true, 4);
+        environmentMap->setTexParameteri(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        environmentMap->setTexParameteri(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        environmentMap->setTexParameteri(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        environmentMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        environmentMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+        skyBox.reset(new Skybox(environmentMap));
         
         turntable.reset(new TurntableManipulator());
         turntable->setCenterPosition(vec3(0,0,0));
@@ -210,7 +227,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     // TODO: Set shader light properties (intensity and position)
     _shader.setUniform("lightPosition", _lightPosition);
     
-    
     // Set texture uniform
     //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 1;
     _bumpMap->bind(1);
@@ -219,6 +235,10 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _reflectionTextureMap->bind(2);
     _shader.setUniform("_reflectionTextureMap", 2);
     
+    //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 3;
+    environmentMap->bind(3);
+    _shader.setUniform("environmentMap", 3);
+    
     vec3 eyePosition = turntable->getPos();
     _shader.setUniform("eye_world", eyePosition);
     
@@ -226,7 +246,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _modelMesh->draw(_shader);
     
     // Draw the skybox. Should be the last thing to draw
-//    skyBox->draw(view, projection);
+    skyBox->draw(view, projection);
 
 }
 

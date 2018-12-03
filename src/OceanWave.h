@@ -31,6 +31,7 @@ using namespace MinVR;
 
 #include <BasicGraphics.h>
 #include "TurntableManipulator.h"
+#include "Skybox.h"
 using namespace basicgraphics;
 
 class OceanWave : public VRApp {
@@ -68,6 +69,9 @@ private:
     // Add bumpMap
     std::shared_ptr<Texture> _bumpMap;
     std::shared_ptr<Texture> _reflectionTextureMap;
+    
+    std::shared_ptr<basicgraphics::Texture> environmentMap;
+    std::shared_ptr<basicgraphics::Skybox> skyBox;
     
     basicgraphics::GLSLProgram _shader;
     
