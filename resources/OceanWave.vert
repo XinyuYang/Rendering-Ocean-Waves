@@ -34,8 +34,11 @@ void main(void)
     // program as an "out" variable, and we'll do the same type of matrix multiplication.  However,
     // it turns out you have to use a slightly different matrix for normals because they transform a
     // bit differently than points.
-    interpSurfNormal = normal_mat * vertex_normal;
+    float bump_normal = texture(_bumpMap, vertex_texcoord);
+    interpSurfNormal = normal_mat * bump_normal;
     
+//        interpSurfNormal = normal_mat * vertex_normal;
+
     // This is the last line of almost every vertex shader program.  We don't need this for our lighting
     // calculations, but it is required by OpenGl.  Whereas a fragment program must output a color
     // as its final result, a vertex program must output a vertex position that has been projected into the

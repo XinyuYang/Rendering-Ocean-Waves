@@ -40,7 +40,7 @@ uniform vec3 eye_world;
 out vec4 fragColor;
 
 void main() {
-    fragColor = Isea;
+    fragColor.rgb = vec3(0.25, 0.30, 1);
 	// Related lighting vectors
     
     vec3 E = normalize(eye_world-vec3(interpSurfPosition)); // E v: from the sur to cam
@@ -63,17 +63,12 @@ void main() {
     // Intrinsic color
     vec3 C = vec3(0.65, 0.80, 0.95);
     
-    //
-    
-    
-    
     //Ambient
     vec3 ambient = ambientReflectionCoeff*ambientLightIntensity;
     
     //Diffuse
     vec3 diffuse = diffuseLightIntensity * diffuseReflectionCoeff * NdotL;
     
-   
     
     //Reflection from the envrionment light: Schlick’s approximation
     vec3 reflectTexCoord = normalize(reflect(-E, N)); // Takes in the incident light, reflects it around normal
@@ -85,13 +80,16 @@ void main() {
 
     // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
     float LdotN = abs(dot(L, N));
-    float F = glassR0 + (1-glassR0)*pow((1-LdotN),5);
+    float F = R + (1-R)*pow((1-EdotH),5);
     F = clamp(F,0,1);
+    
+    // Reflected ray
+    Isun = F/(e)
 
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
 //    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me
-    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
+    fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse; // change me
     // And, set the alpha component to 1.0 (completely opaque, no transparency).
     fragColor.a = 1.0;
 }
