@@ -122,14 +122,12 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
         
-        _reflectionTextureMap = Texture::create2DTextureFromFile("dusk.jpg");
+        _reflectionTextureMap = Texture::create2DTextureFromFile("sky.jpg");
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
-        
-//        skyBox.reset(new Skybox(environmentMap));
         
         turntable.reset(new TurntableManipulator());
         turntable->setCenterPosition(vec3(0,0,0));
@@ -171,17 +169,26 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
     // Properties of the material the model is made out of (the "K" terms in the equations discussed in class)
     // These values should make the model look like it is made out of a metal, like brass
-    vec3 ambientReflectionCoeff(0.7, 0.7, 0.7);
+    vec3 ambientReflectionCoeff(0.5, .5, .5);
     vec3 diffuseReflectionCoeff(0.7, 0.7, 0.7);
     vec3 specularReflectionCoeff(0.9, 0.9, 0.9);
     float m = 0.55;
     float r0 = 0.7;
+    
+//    float absorptionCoeff;
+//    vec3 C(0.65, 0.8, 0.95);
+//    float Kr1 =  1*
+//    float Kr= (K);
+//    float Kt();
+//    float It();
+//    It = (1-Ka)*C;
     
     // Properties of the light source (the "I" terms in the equations discussed in class)
     // These values are for a white light so the r,g,b intensities are all the same
     vec3 ambientLightIntensity(0.3, 0.3, 0.3);
     vec3 diffuseLightIntensity(0.6, 0.6, 0.6);
     vec3 specularLightIntensity(1.0, 1.0, 1.0);
+    
     
     float glassR0 = 0.0200;
     vec3 glassEta(0.65, 0.67, 0.68);
@@ -198,6 +205,16 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
     _shader.setUniform("specularLightIntensity", specularLightIntensity);
+    
+//    
+//    
+//    _shader.setUniform("absorptionCoeff", absorptionCoeff);
+//    _shader.setUniform("C", C);
+//    _shader.setUniform("Kr", Kr);
+//    
+//    _shader.setUniform("Kt", Kt);
+//    _shader.setUniform("It", It);
+
     
     // Cook-Torrance specific properties, m is roughness of water surface
     //Todo: calculate the water r0=0.0200

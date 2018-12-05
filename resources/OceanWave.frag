@@ -20,13 +20,19 @@ uniform vec3 glassEta; // Contains one eta for each color channel (use eta.r, et
 uniform float glassR0; // The Fresnel reflectivity when the incident angle is 0
 
 uniform vec3 ambientReflectionCoeff; //light intensities
-uniform vec3 specularReflectionCoeff;
-uniform vec3 diffuseReflectionCoeff;
+uniform vec3 specularReflectionCoeff; //
+uniform vec3 diffuseReflectionCoeff; // kd
+//uniform vec3 absorptionCoeff; //Ka
 
-uniform vec3 ambientLightIntensity;
-uniform vec3 diffuseLightIntensity;
-uniform vec3 specularLightIntensity;
-
+//uniform vec3 C; // intrinsic color
+//uniform vec3 Kr; // Proportion of energy Reflected
+//uniform vec3 Kt; // Proportion of energy transmitted
+//
+//
+//uniform vec3 It; //Intensity of transmitted light
+uniform vec3 ambientLightIntensity; // Ia * kd * C + Ka
+uniform vec3 diffuseLightIntensity; //
+uniform vec3 specularLightIntensity; //Ir
 
 uniform vec3 eye_world;
 
@@ -34,14 +40,13 @@ uniform vec3 eye_world;
 out vec4 fragColor;
 
 void main() {
-
+    fragColor = Isea;
 	// Related lighting vectors
-
+    
     vec3 E = normalize(eye_world-vec3(interpSurfPosition)); // E v: from the sur to cam
     vec3 L = normalize(vec3(lightPosition)- vec3(interpSurfPosition));//light going out
     vec3 H = normalize(L+E); //H = half-way vector
     vec3 N = normalize(interpSurfNormal);
-    
     
     float NdotL = clamp(dot(N,L), 0.0, 1.0);
     
@@ -54,11 +59,21 @@ void main() {
     
     vec3 skyColor = vec3(0.65, 0.80, 0.95);
     
+    
+    // Intrinsic color
+    vec3 C = vec3(0.65, 0.80, 0.95);
+    
+    //
+    
+    
+    
     //Ambient
     vec3 ambient = ambientReflectionCoeff*ambientLightIntensity;
     
     //Diffuse
     vec3 diffuse = diffuseLightIntensity * diffuseReflectionCoeff * NdotL;
+    
+   
     
     //Reflection from the envrionment light: Schlick’s approximation
     vec3 reflectTexCoord = normalize(reflect(-E, N)); // Takes in the incident light, reflects it around normal
@@ -72,20 +87,6 @@ void main() {
     float LdotN = abs(dot(L, N));
     float F = glassR0 + (1-glassR0)*pow((1-LdotN),5);
     F = clamp(F,0,1);
-//
-//    vec3 refractTexCoord_r = normalize(refract(-E, N, glassEta.r ));
-//    vec4 refractedColor_r = texture(environmentMap , refractTexCoord_r);
-//
-//    vec3 refractTexCoord_g = normalize(refract(-E, N, glassEta.g ));
-//    vec4 refractedColor_g = texture(environmentMap , refractTexCoord_g);
-//
-//    vec3 refractTexCoord_b = normalize(refract(-E, N, glassEta.b));
-//    vec4 refractedColor_b = texture(environmentMap , refractTexCoord_b);
-//
-//    vec4 final_refracted_Color = vec4(0, 0, 0, 0);
-//    final_refracted_Color.r = refractedColor_r.r;
-//    final_refracted_Color.g = refractedColor_g.g;
-//    final_refracted_Color.b = refractedColor_b.b;
 
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T

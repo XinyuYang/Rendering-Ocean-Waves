@@ -75,7 +75,10 @@ private:
     std::shared_ptr<basicgraphics::TurntableManipulator> turntable;
     
     glm::vec4 _lightPosition;
-    
+    glm::vec3 absorptionCoeff;
+    glm::vec3 Kr;
+    glm::vec3 Kt;
+    glm::vec3 It;
 };
 
 
