@@ -137,7 +137,7 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         // -Y (bottom)
         // +Z (front)
         // -Z (back)
-        string textureFiles[] = {"right.jpg", "left.jpg", "up.jpg", "down.jpg", "forward.jpg", "back.jpg"};
+        string textureFiles[] = {"back.jpg", "left.jpg", "up.jpg", "down.jpg", "forward.jpg", "right.jpg"};
 //        string textureFiles[] = {"desert_evening_east.jpg", "desert_evening_west.jpg", "desert_evening_up.jpg", "desert_evening_down.jpg", "desert_evening_north.jpg", "desert_evening_south.jpg"};
         environmentMap = Texture::createCubeMapFromFiles(textureFiles, true, 4);
         environmentMap->setTexParameteri(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
