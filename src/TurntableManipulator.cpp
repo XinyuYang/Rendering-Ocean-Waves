@@ -30,10 +30,10 @@ void TurntableManipulator::onButtonDown(const VRButtonEvent &event) {
     
     string name = event.getName();
     if (name == "KbdUp_Down") {
-        distance -= 0.01;
+        distance -= 0.5;
     }
     else if (name == "KbdDown_Down") {
-        distance += 0.01;
+        distance += 0.5;
     }
     
     // Rotate the earth when the user clicks and drags the mouse
