@@ -23,6 +23,10 @@ out vec4 interpSurfPosition;
 // Normal of the current point on the surface, interpolated across the surface.
 out vec3 interpSurfNormal;
 
+out vec2 textureCoords;
+
+float tiling = 6.0;
+
 void main(void)
 {
     // vertex_position is a variable that holds the 3D position of the current vertex.  We want to
@@ -34,10 +38,12 @@ void main(void)
     // program as an "out" variable, and we'll do the same type of matrix multiplication.  However,
     // it turns out you have to use a slightly different matrix for normals because they transform a
     // bit differently than points.
-    float bump_normal = texture(_bumpMap, vertex_texcoord);
-    interpSurfNormal = normal_mat * bump_normal;
     
-//        interpSurfNormal = normal_mat * vertex_normal;
+      textureCoords = vec2(interpSurfPosition.x/2+0.5, interpSurfPosition.y/2+0.5) * tiling;
+//    vertex_normal = texture(_bumpMap, vec2(vertex_texcoord.x, vertex_texcoord.y,0)).rg*2-1;
+    interpSurfNormal = normal_mat * vertex_normal;
+
+//    interpSurfNormal = normal_mat * vertex_normal;
 
     // This is the last line of almost every vertex shader program.  We don't need this for our lighting
     // calculations, but it is required by OpenGl.  Whereas a fragment program must output a color
@@ -45,4 +51,5 @@ void main(void)
     // 2D screen space as its final result.  The line below does this.  This is exactly what OpenGL
     // would do by default for us if we didn't write our own custom vertex program.
     gl_Position = projection_mat * view_mat * interpSurfPosition;
+
 }

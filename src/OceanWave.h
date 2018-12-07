@@ -69,8 +69,8 @@ private:
     // Add bumpMap
     std::shared_ptr<Texture> _bumpMap;
     std::shared_ptr<Texture> _reflectionTextureMap;
-    
     std::shared_ptr<basicgraphics::Texture> environmentMap;
+    std::shared_ptr<basicgraphics::Texture> _dudvMap;
     std::shared_ptr<basicgraphics::Skybox> skyBox;
     
     basicgraphics::GLSLProgram _shader;

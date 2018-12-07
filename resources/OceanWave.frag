@@ -6,6 +6,7 @@
 // so they change for each pixel across the triangle:
 in vec4 interpSurfPosition;
 in vec3 interpSurfNormal;
+in vec2 textureCoords;
 
 // Light Position in world coordinates
 uniform vec4 lightPosition;
@@ -13,11 +14,11 @@ uniform vec4 lightPosition;
 //Textures
 uniform sampler2D _bumpMap;
 uniform sampler2D _reflectionTextureMap;
+uniform sampler2D _dudvMap;
 
 // Material Properties
-uniform float eta; // The eta value to use initially. This reflects all light wavelengths in the same direction
-uniform vec3 glassEta; // Contains one eta for each color channel (use eta.r, eta.g, eta.b in your code)
-uniform float glassR0; // The Fresnel reflectivity when the incident angle is 0
+uniform vec3 eta; // Index of reflection
+uniform float R; // The Fresnel reflectivity when the incident angle is 0
 
 uniform vec3 ambientReflectionCoeff; //light intensities
 uniform vec3 specularReflectionCoeff; //
@@ -41,6 +42,7 @@ out vec4 fragColor;
 
 void main() {
     fragColor.rgb = vec3(0.25, 0.30, 1);
+    vec2 distortion1 = texture(_bumpMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
 	// Related lighting vectors
     
     vec3 E = normalize(eye_world-vec3(interpSurfPosition)); // E v: from the sur to cam
@@ -71,7 +73,8 @@ void main() {
     
     
     //Reflection from the envrionment light: Schlick’s approximation
-    vec3 reflectTexCoord = normalize(reflect(-E, N)); // Takes in the incident light, reflects it around normal
+    vec2 reflectTexCoord = vec2(normalize(reflect(-E, N))); // Takes in the incident light, reflects it around normal
+    reflectTexCoord += distortion1/5.0;
     
     // Reflection color with cubeMap
     vec4 reflectionColor = texture(_reflectionTextureMap, vec2(reflectTexCoord));
@@ -79,13 +82,10 @@ void main() {
     // Refleciton without cubeMap, only from skyColor
 
     // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
-    float LdotN = abs(dot(L, N));
-    float F = R + (1-R)*pow((1-EdotH),5);
+//    float F = R + (1-R)*pow((1-EdotN),3);
+    float F =(1-EdotN);
     F = clamp(F,0,1);
     
-    // Reflected ray
-    Isun = F/(e)
-
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
 //    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me

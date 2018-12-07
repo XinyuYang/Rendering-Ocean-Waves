@@ -121,10 +121,12 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
-        
         _reflectionTextureMap = Texture::create2DTextureFromFile("sky.jpg");
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
+        
+        _dudvMap = Texture::create2DTextureFromFile("waterDUDV.png");
         
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
@@ -205,11 +207,11 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     // Properties of the light source (the "I" terms in the equations discussed in class)
     // These values are for a white light so the r,g,b intensities are all the same
     vec3 ambientLightIntensity(0.3, 0.3, 0.3);
-    vec3 diffuseLightIntensity(0.6, 0.6, 0.6);
-    vec3 specularLightIntensity(1.0, 1.0, 1.0);
+    vec3 diffuseLightIntensity(0.2, 0.2, 0.2);
+    vec3 specularLightIntensity(.55, .55, .55);
     
-    
-    float glassR0 = 0.0200;
+    float R = 1.33;
+    vec3 eta = vec3(1.33, 1.33, 1.33);
     vec3 glassEta(0.65, 0.67, 0.68);
 
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
@@ -221,12 +223,13 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("diffuseReflectionCoeff", diffuseReflectionCoeff);
     _shader.setUniform("specularReflectionCoeff", specularReflectionCoeff);
     
+    
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
     _shader.setUniform("specularLightIntensity", specularLightIntensity);
     
-//    
-//    
+    
+ 
 //    _shader.setUniform("absorptionCoeff", absorptionCoeff);
 //    _shader.setUniform("C", C);
 //    _shader.setUniform("Kr", Kr);
@@ -240,8 +243,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("r0", r0);
     _shader.setUniform("m", m);
     
-    _shader.setUniform("glassR0", glassR0);
-    _shader.setUniform("glassEta", glassEta);
+    _shader.setUniform("R", R);
+    _shader.setUniform("eta", eta);
     
     // TODO: Set shader light properties (intensity and position)
     _shader.setUniform("lightPosition", _lightPosition);
@@ -257,6 +260,9 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     //This sets the texture to associate with the cubeMap sampler in the shader which is bound to texture unit 3;
     environmentMap->bind(3);
     _shader.setUniform("environmentMap", 3);
+    
+    _dudvMap->bind(4);
+    _shader.setUniform("environmentMap", 4);
     
     vec3 eyePosition = turntable->getPos();
     _shader.setUniform("eye_world", eyePosition);
