@@ -13,7 +13,7 @@ namespace basicgraphics{
     
 class TurntableManipulator {
 public:
-	TurntableManipulator(double d=1.5, double a=0.3, double u=0.5);
+	TurntableManipulator(double d=3.0, double a=0.0, double u=0.5);
     virtual glm::mat4 frame() const;
     virtual void onButtonDown(const VRButtonEvent &state);
     virtual void onButtonUp(const VRButtonEvent &state);
