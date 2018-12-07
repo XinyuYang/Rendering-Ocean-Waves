@@ -139,7 +139,7 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         // -Y (bottom)
         // +Z (front)
         // -Z (back)
-        string textureFiles[] = {"right.jpg", "left.jpg", "up.jpg", "down.jpg", "forward.jpg", "back.jpg"};
+        string textureFiles[] = {"back.jpg", "left.jpg", "up.jpg", "down.jpg", "forward.jpg", "right.jpg"};
 //        string textureFiles[] = {"desert_evening_east.jpg", "desert_evening_west.jpg", "desert_evening_up.jpg", "desert_evening_down.jpg", "desert_evening_north.jpg", "desert_evening_south.jpg"};
         environmentMap = Texture::createCubeMapFromFiles(textureFiles, true, 4);
         environmentMap->setTexParameteri(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -163,7 +163,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Setup the view matrix to set where the camera is located in the scene
-    glm::vec3 eye_world = glm::vec3(0, 10, 5);
+//    glm::vec3 eye_world = glm::vec3(0, 10, 5);
+    glm::vec3 eye_world = turntable->getPos();
     
     // Setup the camera with a good initial position and view direction to see the table
 //    glm::mat4 view = glm::lookAt(eye_world, glm::vec3(0,0,0), glm::vec3(0,1,0));

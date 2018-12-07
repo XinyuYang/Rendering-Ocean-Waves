@@ -42,7 +42,10 @@ out vec4 fragColor;
 
 void main() {
     fragColor.rgb = vec3(0.25, 0.30, 1);
+<<<<<<< HEAD
     vec2 distortion1 = texture(_bumpMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
+=======
+>>>>>>> 4d9c0f2df8dde23046593995d80d6cb52a246b6c
 	// Related lighting vectors
     
     vec3 E = normalize(eye_world-vec3(interpSurfPosition)); // E v: from the sur to cam
@@ -89,6 +92,8 @@ void main() {
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
 //    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me
+
+//    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
     fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse; // change me
     // And, set the alpha component to 1.0 (completely opaque, no transparency).
     fragColor.a = 1.0;
