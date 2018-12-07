@@ -39,6 +39,7 @@ void OceanWave::onAnalogChange(const VRAnalogEvent &event) {
 		_lastTime = _curFrameTime;
 		_curFrameTime = event.getValue();
 	}
+    
 
 
 }
@@ -56,7 +57,7 @@ void OceanWave::onButtonUp(const VRButtonEvent &event) {
     // to see exactly which button has been released.
      turntable->onButtonUp(event);
 
-    std::cout << "ButtonUp: " << event.getName() << std::endl;
+//    std::cout << "ButtonUp: " << event.getName() << std::endl;
 }
 
 void OceanWave::onCursorMove(const VRCursorEvent &event) {
@@ -182,7 +183,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), windowWidth / windowHeight, 0.01f, 100.0f);
     
     // Move the water
-    moveFactor += waveSpeed;
+    moveFactor += waveSpeed * (_curFrameTime - _lastTime);
     
     moveFactor = mod(moveFactor, 1.0f);
     

@@ -87,8 +87,6 @@ private:
     float waveSpeed;
     float moveFactor;
     
-//    double lastTime;
-//    double currentTime;
 };
 
 
