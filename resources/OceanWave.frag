@@ -41,9 +41,9 @@ uniform vec3 eye_world;
 out vec4 fragColor;
 
 void main() {
-    fragColor.rgb = vec3(0.25, 0.30, 1);
+    fragColor.rgb = vec3(0.1, 0.15, 1.0);
 
-    vec2 distortion1 = texture(_bumpMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
+    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
 
 	// Related lighting vectors
     
@@ -85,7 +85,7 @@ void main() {
 
     // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
 //    float F = R + (1-R)*pow((1-EdotN),3);
-    float F =(1-EdotN);
+    float F =pow((1-EdotN), 3);
     F = clamp(F,0,1);
     
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F

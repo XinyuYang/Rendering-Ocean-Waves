@@ -121,7 +121,7 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         _bumpMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _bumpMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
-        _reflectionTextureMap = Texture::create2DTextureFromFile("sky.jpg");
+        _reflectionTextureMap = Texture::create2DTextureFromFile("up.jpg");
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         _reflectionTextureMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
