@@ -83,6 +83,12 @@ private:
     glm::vec3 Kr;
     glm::vec3 Kt;
     glm::vec3 It;
+    
+    float waveSpeed;
+    float moveFactor;
+    
+//    double lastTime;
+//    double currentTime;
 };
 
 
