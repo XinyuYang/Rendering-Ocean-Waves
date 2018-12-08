@@ -71,6 +71,8 @@ private:
     std::shared_ptr<Texture> _reflectionTextureMap;
     std::shared_ptr<basicgraphics::Texture> environmentMap;
     std::shared_ptr<basicgraphics::Texture> _dudvMap;
+    std::shared_ptr<basicgraphics::Texture> _normalMap;
+
     std::shared_ptr<basicgraphics::Skybox> skyBox;
     
     basicgraphics::GLSLProgram _shader;
@@ -84,8 +86,10 @@ private:
     glm::vec3 Kt;
     glm::vec3 It;
     
-//    float waveSpeed;
-//    float moveFactor;
+    float waveSpeed;
+    float moveFactor;
+    
+    vec3 lightColor;
     
 };
 

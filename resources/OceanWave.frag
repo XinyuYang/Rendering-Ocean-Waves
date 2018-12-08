@@ -15,6 +15,9 @@ uniform vec4 lightPosition;
 uniform sampler2D _bumpMap;
 uniform sampler2D _reflectionTextureMap;
 uniform sampler2D _dudvMap;
+uniform sampler2D _normalMap;
+
+uniform vec3 lightColor;
 
 // Material Properties
 uniform vec3 eta; // Index of refraction
@@ -41,16 +44,22 @@ uniform vec3 eye_world;
 out vec4 fragColor;
 
 //// Making water move
-//const float waveStrength = 0.5;
-//
-//uniform float moveFactor;
+const float waveStrength = 0.5;
+const float shineDamper = 20.0;
+const float reflectivity = 0.6;
+
+uniform float moveFactor;
 
 void main() {
-    fragColor.rgb = vec3(0.1, 0.15, 1.0);
+    fragColor.rgb = vec3(0.3, 0.65, 1.0);
 
-    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
+    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x+moveFactor, textureCoords.y+moveFactor)).rg*0.2*waveStrength;
 
 	// Related lighting vectors
+    
+    vec2 distortedTexCoords = texture(_bumpMap, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg;
+    distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);
+    vec2 totalDistortion = (texture(_bumpMap, distortedTexCoords).rg * 2.0) * waveStrength;
     
     vec3 E = normalize(eye_world-vec3(interpSurfPosition)); // E v: from the sur to cam
     vec3 L = normalize(vec3(lightPosition)- vec3(interpSurfPosition));//light going out
@@ -81,7 +90,7 @@ void main() {
     
     //Reflection from the envrionment light: Schlick’s approximation
     vec2 reflectTexCoord = vec2(normalize(reflect(-E, N))); // Takes in the incident light, reflects it around normal
-    reflectTexCoord += distortion1;
+    reflectTexCoord += totalDistortion;
     
     reflectTexCoord.x = clamp(reflectTexCoord.x, 0.001, 0.999);
     reflectTexCoord.y = clamp(reflectTexCoord.y, -0.999, -0.001);
@@ -96,12 +105,23 @@ void main() {
     float F =pow((1-EdotN), 3);
     F = clamp(F,0,1);
     
+    vec4 normalMapColor = texture(_normalMap, totalDistortion);
+    vec3 normal = vec3(normalMapColor.r * 2.0 - 1.0, normalMapColor.b, normalMapColor.g * 2.0 - 1.0);
+    normal = normalize(normal);
+    
+    vec3 reflectedLight = reflect(normalize(L), N);
+    float specular = max(dot(reflectedLight, E), 0.0);
+    specular = pow(specular, shineDamper);
+    vec3 specularHighlights = lightColor * specular * reflectivity;
+    
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
 //    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me
 
 //    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
-    fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse; // change me
+    fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse + specularHighlights; // change me
+//    fragColor.rgb = vec3(normalMapColor);
+
     // And, set the alpha component to 1.0 (completely opaque, no transparency).
     fragColor.a = 1.0;
 }

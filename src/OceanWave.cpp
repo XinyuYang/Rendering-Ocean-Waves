@@ -112,6 +112,8 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
 		// build and compile shaders
         reloadShaders();
         
+        lightColor = vec3(0.9, 0.9, 0.9);
+        
         // load model
         // -----------
         _modelMesh.reset(new Model("Ocean3.obj", 0.05, glm::vec4(1.0)));
@@ -128,6 +130,12 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         
         
         _dudvMap = Texture::create2DTextureFromFile("waterDUDV.png");
+        _dudvMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        _dudvMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        
+        _normalMap = Texture::create2DTextureFromFile("normal.jpeg");
+        _normalMap->setTexParameteri(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        _normalMap->setTexParameteri(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
@@ -182,10 +190,10 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	GLfloat windowWidth = renderState.index().getValue("WindowWidth");
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), windowWidth / windowHeight, 0.01f, 100.0f);
     
-//    // Move the water
-//    moveFactor += waveSpeed * (_curFrameTime - _lastTime);
-//
-//    moveFactor = mod(moveFactor, 1.0f);
+    // Move the water
+    moveFactor += waveSpeed * (_curFrameTime - _lastTime);
+
+    moveFactor = mod(moveFactor, 1.0f);
     
     // Setup the model matrix
     glm::mat4 model = glm::mat4(1.0);
@@ -235,7 +243,8 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
     _shader.setUniform("diffuseReflectionCoeff", diffuseReflectionCoeff);
     _shader.setUniform("specularReflectionCoeff", specularReflectionCoeff);
-//    _shader.setUniform("moveFactor", moveFactor);
+    _shader.setUniform("moveFactor", moveFactor);
+    _shader.setUniform("lightColor", lightColor);
     
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
@@ -276,6 +285,9 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
     _dudvMap->bind(4);
     _shader.setUniform("environmentMap", 4);
+    
+    _normalMap -> bind(5);
+    _shader.setUniform("normalMap", 5);
     
     vec3 eyePosition = turntable->getPos();
     _shader.setUniform("eye_world", eyePosition);
