@@ -8,6 +8,7 @@ in vec4 interpSurfPosition;
 in vec3 interpSurfNormal;
 in vec2 textureCoords;
 
+
 // Light Position in world coordinates
 uniform vec4 lightPosition;
 

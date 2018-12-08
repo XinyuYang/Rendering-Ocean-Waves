@@ -15,6 +15,22 @@ layout (location = 0) in vec3 vertex_position;
 layout (location = 1) in vec3 vertex_normal;
 layout (location = 2) in vec2 vertex_texcoord;
 
+layouy (vertices = 16) out;
+
+const int AB = 2;
+const int BC = 3;
+const int CD = 0;
+const int DA = 1;
+
+uniform int tessellationFactor;
+uniform float tessellationSlope;
+uniform float tessellationShift
+
+float LoadFactor(float dist) {
+    float tessellationLevel = max(0.0, tessellationFractor/pow(dist, tessellationSlope) + tessellationShift);
+    return tessellationLevel;
+}
+
 // OUTPUT: to the fragment shader
 
 // Position of the current point on the surface, interpolated across the surface.
@@ -43,7 +59,8 @@ void main(void)
 //    vertex_normal = texture(_bumpMap, vec2(vertex_texcoord.x, vertex_texcoord.y,0)).rg*2-1;
     interpSurfNormal = normal_mat * vertex_normal;
 
-//    interpSurfNormal = normal_mat * vertex_normal;
+    // ---------------Animate wave---------------
+    
 
     // This is the last line of almost every vertex shader program.  We don't need this for our lighting
     // calculations, but it is required by OpenGl.  Whereas a fragment program must output a color
