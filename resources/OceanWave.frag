@@ -40,15 +40,15 @@ uniform vec3 eye_world;
 // This is an out variable for the final color we want to render this fragment.
 out vec4 fragColor;
 
-// Making water move
-const float waveStrength = 0.5;
-
-uniform float moveFactor;
+//// Making water move
+//const float waveStrength = 0.5;
+//
+//uniform float moveFactor;
 
 void main() {
     fragColor.rgb = vec3(0.1, 0.15, 1.0);
 
-    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x+moveFactor, textureCoords.y+moveFactor)).rg*0.2*waveStrength;
+    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x, textureCoords.y)).rg*0.2;
 
 	// Related lighting vectors
     
