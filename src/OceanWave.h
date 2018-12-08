@@ -84,8 +84,8 @@ private:
     glm::vec3 Kt;
     glm::vec3 It;
     
-    float waveSpeed;
-    float moveFactor;
+//    float waveSpeed;
+//    float moveFactor;
     
 };
 

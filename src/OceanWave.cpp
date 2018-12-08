@@ -132,8 +132,8 @@ void OceanWave::onRenderGraphicsContext(const VRGraphicsState &renderState) {
         float radius = 5.0;
         _lightPosition = vec4(-1.7*radius, 0.3*radius, -1.0*radius, 1.0);
         
-        waveSpeed = 0.05;
-        moveFactor = 0.0;
+//        waveSpeed = 0.05;
+//        moveFactor = 0.0;
         
 //        lastTime = ;
 //        currentTime = ;
@@ -182,10 +182,10 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
 	GLfloat windowWidth = renderState.index().getValue("WindowWidth");
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), windowWidth / windowHeight, 0.01f, 100.0f);
     
-    // Move the water
-    moveFactor += waveSpeed * (_curFrameTime - _lastTime);
-    
-    moveFactor = mod(moveFactor, 1.0f);
+//    // Move the water
+//    moveFactor += waveSpeed * (_curFrameTime - _lastTime);
+//
+//    moveFactor = mod(moveFactor, 1.0f);
     
     // Setup the model matrix
     glm::mat4 model = glm::mat4(1.0);
@@ -235,7 +235,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
     _shader.setUniform("diffuseReflectionCoeff", diffuseReflectionCoeff);
     _shader.setUniform("specularReflectionCoeff", specularReflectionCoeff);
-    _shader.setUniform("moveFactor", moveFactor);
+//    _shader.setUniform("moveFactor", moveFactor);
     
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
