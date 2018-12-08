@@ -8,7 +8,6 @@ in vec4 interpSurfPosition;
 in vec3 interpSurfNormal;
 in vec2 textureCoords;
 
-
 // Light Position in world coordinates
 uniform vec4 lightPosition;
 
@@ -18,7 +17,7 @@ uniform sampler2D _reflectionTextureMap;
 uniform sampler2D _dudvMap;
 
 // Material Properties
-uniform vec3 eta; // Index of reflection
+uniform vec3 eta; // Index of refraction
 uniform float R; // The Fresnel reflectivity when the incident angle is 0
 
 uniform vec3 ambientReflectionCoeff; //light intensities

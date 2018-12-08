@@ -17,19 +17,6 @@ layout (location = 2) in vec2 vertex_texcoord;
 
 layout (vertices = 16) out;
 
-const int AB = 2;
-const int BC = 3;
-const int CD = 0;
-const int DA = 1;
-
-uniform int tessellationFactor;
-uniform float tessellationSlope;
-uniform float tessellationShift
-
-float LoadFactor(float dist) {
-    float tessellationLevel = max(0.0, tessellationFractor/pow(dist, tessellationSlope) + tessellationShift);
-    return tessellationLevel;
-}
 
 // OUTPUT: to the fragment shader
 
