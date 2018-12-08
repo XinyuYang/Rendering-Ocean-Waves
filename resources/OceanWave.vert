@@ -15,7 +15,7 @@ layout (location = 0) in vec3 vertex_position;
 layout (location = 1) in vec3 vertex_normal;
 layout (location = 2) in vec2 vertex_texcoord;
 
-layouy (vertices = 16) out;
+layout (vertices = 16) out;
 
 const int AB = 2;
 const int BC = 3;

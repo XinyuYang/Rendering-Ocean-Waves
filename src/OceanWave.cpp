@@ -225,7 +225,7 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     
     float R = 1.33;
     vec3 eta = vec3(1.33, 1.33, 1.33);
-    vec3 glassEta(0.65, 0.67, 0.68);
+
 
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
     
