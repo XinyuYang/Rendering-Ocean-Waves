@@ -88,6 +88,7 @@ private:
     
     float waveSpeed;
     float moveFactor;
+    float R;
     
     vec3 lightColor;
     

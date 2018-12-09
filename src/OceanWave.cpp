@@ -13,10 +13,6 @@ using namespace basicgraphics;
 using namespace std;
 using namespace glm;
 
-//// settings
-//const unsigned int SCR_WIDTH = 1280;
-//const unsigned int SCR_HEIGHT = 720;
-
 OceanWave::OceanWave(int argc, char** argv) : VRApp(argc, argv)
 {
 	_lastTime = 0.0;
@@ -39,9 +35,6 @@ void OceanWave::onAnalogChange(const VRAnalogEvent &event) {
 		_lastTime = _curFrameTime;
 		_curFrameTime = event.getValue();
 	}
-    
-
-
 }
 
 void OceanWave::onButtonDown(const VRButtonEvent &event) {
@@ -214,8 +207,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     vec3 ambientReflectionCoeff(0.5, .5, .5);
     vec3 diffuseReflectionCoeff(0.7, 0.7, 0.7);
     vec3 specularReflectionCoeff(0.9, 0.9, 0.9);
-    float m = 0.55;
-    float r0 = 0.7;
     
 //    float absorptionCoeff;
 //    vec3 C(0.65, 0.8, 0.95);
@@ -230,14 +221,12 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     vec3 ambientLightIntensity(0.3, 0.3, 0.3);
     vec3 diffuseLightIntensity(0.2, 0.2, 0.2);
     vec3 specularLightIntensity(.55, .55, .55);
+    float R = 0.02; // Reflection coefficient; Calculated from air-water reflection index
     
-    float R = 1.33;
-    vec3 eta = vec3(1.33, 1.33, 1.33);
-
-
     // Pass these parameters into your shader programs... in shader programs these are called "uniform variables"
-    
-    // TODO: Set shader material properties (k coeffs)
+
+    // Schilick's model specific properties
+    _shader.setUniform("R", R);
     
     //send the values to the shaders
     _shader.setUniform("ambientReflectionCoeff", ambientReflectionCoeff);
@@ -249,24 +238,6 @@ void OceanWave::onRenderGraphicsScene(const VRGraphicsState &renderState) {
     _shader.setUniform("ambientLightIntensity", ambientLightIntensity);
     _shader.setUniform("diffuseLightIntensity", diffuseLightIntensity);
     _shader.setUniform("specularLightIntensity", specularLightIntensity);
-    
-    
- 
-//    _shader.setUniform("absorptionCoeff", absorptionCoeff);
-//    _shader.setUniform("C", C);
-//    _shader.setUniform("Kr", Kr);
-//    
-//    _shader.setUniform("Kt", Kt);
-//    _shader.setUniform("It", It);
-
-    
-    // Cook-Torrance specific properties, m is roughness of water surface
-    //Todo: calculate the water r0=0.0200
-    _shader.setUniform("r0", r0);
-    _shader.setUniform("m", m);
-    
-    _shader.setUniform("R", R);
-    _shader.setUniform("eta", eta);
     
     // TODO: Set shader light properties (intensity and position)
     _shader.setUniform("lightPosition", _lightPosition);
