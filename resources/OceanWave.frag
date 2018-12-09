@@ -17,6 +17,7 @@ uniform sampler2D _reflectionTextureMap;
 uniform sampler2D _dudvMap;
 uniform sampler2D _normalMap;
 
+
 uniform vec3 lightColor;
 
 // Material Properties
@@ -50,9 +51,9 @@ const float reflectivity = 0.6;
 uniform float moveFactor;
 
 void main() {
-    fragColor.rgb = vec3(0.3, 0.65, 1.0);
+    fragColor.rgb = vec3(0.1, 0.55, .85);
 
-    vec2 distortion1 = texture(_dudvMap, vec2(textureCoords.x+moveFactor, textureCoords.y+moveFactor)).rg*0.2*waveStrength;
+    vec2 distortion1 = texture(_bumpMap, vec2(textureCoords.x+moveFactor, textureCoords.y+moveFactor)).rg*0.2*waveStrength;
 
 	// Related lighting vectors
     
@@ -100,17 +101,17 @@ void main() {
 
     // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
 //    float F = R + (1-R)*pow((1-EdotN),3);
-    float F = R+(1-R)*pow((1-EdotN), 5);
+    float F = 0.02+0.98*pow((1-EdotN), 3);
     F = clamp(F,0,1);
     
     vec4 normalMapColor = texture(_normalMap, distortedTexCoords);
     vec3 normal = vec3(normalMapColor.r , normalMapColor.b, normalMapColor.g);
     normal = normalize(normal);
     
-//    vec3 reflectedLight = reflect(normalize(L), N);
-//    float specular = max(dot(reflectedLight, E), 0.0);
-//    specular = pow(specular, shineDamper);
-//    vec3 specularHighlights = lightColor * specular * reflectivity;
+    vec3 reflectedLight = reflect(normalize(L), N);
+    float specular = max(dot(reflectedLight, E), 0.0);
+    specular = pow(specular, shineDamper);
+    vec3 specularHighlights = lightColor * specular * reflectivity;
 
     // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
 	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
@@ -119,6 +120,7 @@ void main() {
 //    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
     fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse; // change me
 //    fragColor.rgb = vec3(normalMapColor);
+
 
     // And, set the alpha component to 1.0 (completely opaque, no transparency).
     fragColor.a = 1.0;
