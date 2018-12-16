@@ -24,6 +24,10 @@ We followed the illumination model of Output color = OceanColor + F * SkyReflect
 
 
 ## Results
+![effect1](https://github.com/XinyuYang/Rendering-Ocean-Waves/blob/master/resources/effect1.png)
+![effect2](https://github.com/XinyuYang/Rendering-Ocean-Waves/blob/master/resources/effect2.png)
+![effect3](https://github.com/XinyuYang/Rendering-Ocean-Waves/blob/master/resources/effect3.png)
+
 
 
 
