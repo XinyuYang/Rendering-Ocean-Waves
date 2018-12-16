@@ -45,8 +45,6 @@ void main(void)
       textureCoords = vec2(interpSurfPosition.x/2+0.5, interpSurfPosition.y/2+0.5) * tiling;
 //    vertex_normal = texture(_bumpMap, vec2(vertex_texcoord.x, vertex_texcoord.y,0)).rg*2-1;
     interpSurfNormal = normal_mat * vertex_normal;
-
-    // ---------------Animate wave---------------
     
 
     // This is the last line of almost every vertex shader program.  We don't need this for our lighting

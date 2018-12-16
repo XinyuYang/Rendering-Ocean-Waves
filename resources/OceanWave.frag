@@ -90,16 +90,15 @@ void main() {
     //Reflection from the envrionment map: Schlick’s approximation
     vec2 reflectTexCoord = vec2(normalize(reflect(-E, N))); // Takes in the incident light, reflects it around normal
     reflectTexCoord += distortion1;
-//
-//    reflectTexCoord.x = clamp(reflectTexCoord.x, 0.001, 0.999);
-//    reflectTexCoord.y = clamp(reflectTexCoord.y, -0.999, -0.001);
+    
+    reflectTexCoord.x = clamp(reflectTexCoord.x, 0.001, 0.999);
+    reflectTexCoord.y = clamp(reflectTexCoord.y, -0.999, -0.001);
 
     // Reflection color
     vec4 reflectionColor = texture(_reflectionTextureMap, vec2(reflectTexCoord));
 
-    // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
-//    float F = R + (1-R)*pow((1-EdotN),3);
-    float F = 0.02+0.98*pow((1-EdotN), 5);
+    // Reflectance F(reflection coefficient)
+    float F = R+(1-R)*pow((1-EdotN), 5);
     F = clamp(F,0,1);
     
     vec4 normalMapColor = texture(_normalMap, distortedTexCoords);
@@ -111,14 +110,7 @@ void main() {
     specular = pow(specular, shineDamper);
     vec3 specularHighlights = lightColor * specular * reflectivity;
 
-    // T: fraction refracted/absorbed. Total energy is conserved, T = 1.0 − F
-	// Tell OpenGL to use the mix of the refracted and reflected color based on the fresnel term, F and T
-//    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me
-
-//    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
     fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb; // change me
-//    fragColor.rgb = vec3(normalMapColor);
-
 
     // And, set the alpha component to 1.0 (completely opaque, no transparency).
     fragColor.a = 1.0;
