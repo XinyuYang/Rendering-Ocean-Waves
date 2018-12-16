@@ -51,7 +51,7 @@ const float reflectivity = 0.6;
 uniform float moveFactor;
 
 void main() {
-    fragColor.rgb = vec3(0.1, 0.55, .85);
+    fragColor.rgb = vec3(0.1, 0.25, .45);
 
     vec2 distortion1 = texture(_bumpMap, vec2(textureCoords.x+moveFactor, textureCoords.y+moveFactor)).rg*0.2*waveStrength;
 
@@ -90,24 +90,22 @@ void main() {
     //Reflection from the envrionment map: Schlick’s approximation
     vec2 reflectTexCoord = vec2(normalize(reflect(-E, N))); // Takes in the incident light, reflects it around normal
     reflectTexCoord += distortion1;
-    
-    reflectTexCoord.x = clamp(reflectTexCoord.x, 0.001, 0.999);
-    reflectTexCoord.y = clamp(reflectTexCoord.y, -0.999, -0.001);
-    
-    // Reflection color with cubeMap
+//
+//    reflectTexCoord.x = clamp(reflectTexCoord.x, 0.001, 0.999);
+//    reflectTexCoord.y = clamp(reflectTexCoord.y, -0.999, -0.001);
+
+    // Reflection color
     vec4 reflectionColor = texture(_reflectionTextureMap, vec2(reflectTexCoord));
-    
-    // Refleciton without cubeMap, only from skyColor
 
     // Calculate reflectance F(reflection coefficient), a percentage of how much light is reflected, (1-F) is refraction
 //    float F = R + (1-R)*pow((1-EdotN),3);
-    float F = 0.02+0.98*pow((1-EdotN), 3);
+    float F = 0.02+0.98*pow((1-EdotN), 5);
     F = clamp(F,0,1);
     
     vec4 normalMapColor = texture(_normalMap, distortedTexCoords);
     vec3 normal = vec3(normalMapColor.r , normalMapColor.b, normalMapColor.g);
     normal = normalize(normal);
-    
+
     vec3 reflectedLight = reflect(normalize(L), N);
     float specular = max(dot(reflectedLight, E), 0.0);
     specular = pow(specular, shineDamper);
@@ -118,7 +116,7 @@ void main() {
 //    fragColor.rgb = (F * reflectionColor +(1-F) * final_refracted_Color).rgb; // change me
 
 //    fragColor.rgb = (F * vec3(reflectionColor)).rgb; // change me
-    fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb + ambient + diffuse; // change me
+    fragColor.rgb = (F * vec3(reflectionColor)).rgb + fragColor.rgb; // change me
 //    fragColor.rgb = vec3(normalMapColor);
 
 
